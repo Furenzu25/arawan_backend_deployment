@@ -1,0 +1,22 @@
+export const RATE_LIMIT = {
+  WINDOW_SECONDS: 60,
+  MAX_REQUESTS: 60,
+} as const;
+
+export const BODY_LIMITS = {
+  JSON_MAX_BYTES: 3 * 1024 * 1024,
+  FORM_MAX_BYTES: 6 * 1024 * 1024,
+} as const;
+
+export const FILE_LIMITS = {
+  MAX_SIZE_BYTES: 5 * 1024 * 1024,
+  MAX_DATA_URL_LENGTH: 2_000_000,
+  ALLOWED_MIME_TYPES: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'] as const,
+} as const;
+
+export const LOAN = {
+  INTEREST_RATE: 0.20,
+  TERM_DAYS: 60,
+  MIN_PRINCIPAL: 1000,
+  MAX_PRINCIPAL: 500_000,
+} as const;
