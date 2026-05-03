@@ -1,5 +1,7 @@
 import 'dotenv/config';
 import 'reflect-metadata';
+import helmet from 'helmet';
+import compression from 'compression';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
@@ -12,6 +14,10 @@ async function bootstrap() {
   const env = validateEnv();
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.use(helmet());
+  app.use(compression());
+  app.enableShutdownHooks();
 
   const origins = env.CORS_ORIGIN.split(',').map((o) => o.trim());
   app.enableCors({ origin: origins, credentials: true });

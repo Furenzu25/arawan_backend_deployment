@@ -10,11 +10,12 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { FILE_LIMITS } from '../config/constants';
+import { FILE_LIMITS, WRITE_RATE_LIMIT } from '../config/constants';
 
 @Controller('customers')
 export class CustomersController {
@@ -26,6 +27,7 @@ export class CustomersController {
   }
 
   @Post()
+  @Throttle({ default: { ttl: WRITE_RATE_LIMIT.WINDOW_MS, limit: WRITE_RATE_LIMIT.MAX_REQUESTS } })
   @UseInterceptors(
     FileInterceptor('photo', {
       limits: { fileSize: FILE_LIMITS.MAX_SIZE_BYTES },

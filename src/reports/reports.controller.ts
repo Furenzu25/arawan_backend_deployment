@@ -1,11 +1,15 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { ReportsService } from './reports.service';
+import { CACHE_TTL } from '../config/constants';
 
 @Controller('reports')
+@UseInterceptors(CacheInterceptor)
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
   @Get()
+  @CacheTTL(CACHE_TTL.REPORTS_MS)
   getReport(
     @Query('type') type?: string,
     @Query('date') date?: string,

@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Param, Body, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { LoansService } from './loans.service';
 import { CreateLoanDto } from './dto/create-loan.dto';
 import { UpdateLoanStatusDto } from './dto/update-loan-status.dto';
 import { AgreementSignatureDto } from './dto/agreement-signature.dto';
+import { IdempotencyGuard } from '../common/guards/idempotency.guard';
+import { WRITE_RATE_LIMIT } from '../config/constants';
 
 @Controller('loans')
 export class LoansController {
@@ -14,6 +17,8 @@ export class LoansController {
   }
 
   @Post()
+  @Throttle({ default: { ttl: WRITE_RATE_LIMIT.WINDOW_MS, limit: WRITE_RATE_LIMIT.MAX_REQUESTS } })
+  @UseGuards(IdempotencyGuard)
   create(@Body() dto: CreateLoanDto) {
     return this.loansService.create(dto);
   }
