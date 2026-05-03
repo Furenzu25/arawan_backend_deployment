@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import 'reflect-metadata';
 import helmet from 'helmet';
-import compression from 'compression';
+import * as compression from 'compression';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
